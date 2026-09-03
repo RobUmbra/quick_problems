@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Competition Test Prep</title>
+
+    <!-- MathJax for rendering LaTeX math formulas -->
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+        startup: { typeset: false }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 920px;
+            margin: 30px auto;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            color: #222;
+            background-color: #f4f6f9;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Mathematical_symbols_background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.08;
+            z-index: -1;
+        }
+
+        /* Card Panels */
+        .card-panel {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-top: 15px;
+        }
+
+        h1, h2, h3 {
+            color: #003366;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Filter & Configuration Sections */
+        .filter-section {
+            background: #f8f9fa;
+            border: 1px solid #e2e5e8;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            text-align: left;
+        }
+
+        .filter-section h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-actions {
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .filter-actions a {
+            color: #0056b3;
+            text-decoration: none;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .filter-actions a:hover {
+            text-decoration: underline;
+        }
+
+        /* Interactive Pill Buttons */
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #b8c7d9;
+            background: #ffffff;
+            color: #495057;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+
+        .pill:hover {
+            border-color: #0056b3;
+            color: #0056b3;
+        }
+
+        .pill.active {
+            background: #0056b3;
+            border-color: #0056b3;
+            color: #ffffff;
+        }
+
+        /* Sliders */
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .slider-value-badge {
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .single-range {
+            width: 100%;
+            margin: 10px 0;
+            cursor: pointer;
+            accent-color: #0056b3;
+        }
+
+        /* Buttons */
+        button {
+            font-size: 15px;
+            padding: 10px 22px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.15s ease, transform 0.05s ease;
+        }
+
+        button:hover {
+            background-color: #004085;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-green {
+            background-color: #28a745;
+        }
+        .btn-green:hover {
+            background-color: #218838;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* Timer Header in Test View */
+        .test-header-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .test-progress {
+            font-size: 16px;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .timer-display {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 26px;
+            font-weight: bold;
+            color: #111111;
+            padding: 2px 10px;
+            border-radius: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .timer-display.timer-warning {
+            color: #dc3545 !important;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Question Card & Bubble Options */
+        .question-card {
+            background: #ffffff;
+            border-left: 5px solid #0056b3;
+            border-radius: 6px;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .question-prompt {
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 18px;
+            background: #fdfdfd;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .choice-option:hover {
+            border-color: #0056b3;
+            background: #f0f7ff;
+        }
+
+        .choice-bubble {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            background: #ffffff;
+            color: #333;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+
+        .choice-option:hover .choice-bubble {
+            border-color: #0056b3;
+            color: #0056b3;
+        }
+
+        /* Results Card */
+        .score-summary-banner {
+            background: #eef5ff;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-summary-banner h2 {
+            margin: 0 0 6px 0;
+            color: #004085;
+        }
+
+        .result-item {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            background: #ffffff;
+            position: relative;
+        }
+
+        .result-item.correct {
+            border-left: 6px solid #28a745;
+        }
+
+        .result-item.incorrect {
+            border-left: 6px solid #dc3545;
+        }
+
+        .result-item.unanswered {
+            border-left: 6px solid #ffc107;
+        }
+
+        .result-status-badge {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .status-correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-unanswered {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .tag-badge {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #c8e6c9;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+
+        /* Error Banner */
+        #error-banner {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        /* Print / PDF Formatting */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                color: #000 !important;
+            }
+
+            body::before,
+            .test-header-bar,
+            .action-row,
+            #landing-page,
+            .btn-print-hide {
+                display: none !important;
+            }
+
+            .card-panel {
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: transparent !important;
+            }
+
+            .question-card, .result-item {
+                box-shadow: none !important;
+                border: 1px solid #999 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 20px;
+                padding: 12px 16px !important;
+            }
+
+            .choice-option {
+                border: 1px solid #bbb !important;
+                padding: 6px 12px !important;
+            }
+
+            .tag-badge, .result-status-badge {
+                border: 1px solid #666 !important;
+                background: #f0f0f0 !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LANDING / SETUP PAGE -->
+    <div id="landing-page" class="card-panel">
+        <h1 style="text-align: center;">Math Contest Practice Center</h1>
+        <p class="subtitle" style="text-align: center;">Target AMC 8, AMC 10 (Q1–10), and MATHCOUNTS Chapter / State level competition questions.</p>
+
+        <!-- Topic Selection -->
+        <div class="filter-section">
+            <h3>
+                <span>1. Select Subject Areas</span>
+                <span class="filter-actions">
+                    <a id="topics-select-all">Select All</a>
+                    <a id="topics-clear-all">Clear All</a>
+                </span>
+            </h3>
+            <div class="pill-group" id="topic-pills">
+                <div class="pill active" data-topic="Algebra">Algebra</div>
+                <div class="pill active" data-topic="Geometry">Geometry</div>
+                <div class="pill active" data-topic="Number Theory">Number Theory</div>
+                <div class="pill active" data-topic="Counting & Probability">Counting & Probability</div>
+            </div>
+        </div>
+
+        <!-- Problem Count Slider (5 to 20) -->
+        <div class="filter-section">
+            <h3>2. Problem Count (5 to 20)</h3>
+            <div class="slider-label">
+                <span>Number of Problems:</span>
+                <span id="count-display" class="slider-value-badge">10 Problems</span>
+            </div>
+            <input type="range" id="count-slider" class="single-range" min="5" max="20" value="10" step="1">
+        </div>
+
+        <!-- Timer Duration Slider (5 to 60 min) -->
+        <div class="filter-section">
+            <h3>3. Test Timer Duration</h3>
+            <div class="slider-label">
+                <span>Time Limit:</span>
+                <span id="timer-display-val" class="slider-value-badge">20 Minutes</span>
+            </div>
+            <input type="range" id="timer-slider" class="single-range" min="5" max="60" value="20" step="5">
+        </div>
+
+        <div id="error-banner"></div>
+
+        <div class="action-row">
+            <button id="start-test-btn" class="btn-green" style="font-size: 17px; padding: 12px 30px;">⏱ Start Timed Test</button>
+            <button id="print-worksheet-btn" class="btn-secondary" style="font-size: 17px; padding: 12px 25px;">📄 Save as Worksheet (PDF)</button>
+        </div>
+    </div>
+
+    <!-- 2. INTERACTIVE TIMED TEST PAGE -->
+    <div id="test-page" style="display: none;">
+        <div class="test-header-bar">
+            <div class="test-progress" id="test-progress-text">Problem 1 of 10</div>
+            <div class="timer-display" id="test-timer">20:00</div>
+            <button id="test-abort-btn" class="btn-danger" style="padding: 6px 14px; font-size: 13px;">End Test & Submit</button>
+        </div>
+
+        <div class="card-panel" style="margin-top: 0;">
+            <div id="active-question-container"></div>
+        </div>
+    </div>
+
+    <!-- 3. TEST RESULTS PAGE -->
+    <div id="results-page" style="display: none;">
+        <div class="card-panel">
+            <div class="score-summary-banner">
+                <h2 id="score-headline">Test Completed!</h2>
+                <div id="score-details" style="font-size: 17px; font-weight: 500; color: #333;"></div>
+            </div>
+
+            <div class="action-row btn-print-hide" style="margin-bottom: 25px;">
+                <button onclick="window.print()" class="btn-green">💾 Save Results as PDF</button>
+                <button id="results-back-btn" class="btn-secondary">↺ New Test / Setup</button>
+            </div>
+
+            <div id="results-list-container"></div>
+        </div>
+    </div>
+
+    <!-- 4. PRINTABLE WORKSHEET VIEW -->
+    <div id="worksheet-page" style="display: none;">
+        <div class="card-panel">
+            <div class="action-row btn-print-hide" style="justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 0; margin-bottom: 25px;">
+                <button id="worksheet-back-btn" class="btn-secondary">← Back to Setup</button>
+                <button onclick="window.print()" class="btn-green">🖨 Save as PDF</button>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="margin-bottom: 4px;">Mathematics Competition Practice Set</h2>
+                <div id="worksheet-meta" style="color: #666; font-size: 14px;"></div>
+            </div>
+
+            <div id="worksheet-list-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const PROBLEM_FILE = './problems.txt';
+        let allProblems = [];
+        let activeTestSet = [];
+        let userAnswers = {};
+        let currentProblemIndex = 0;
+        let testTimerInterval = null;
+        let remainingSeconds = 0;
+
+        // DOM Elements
+        const landingPage = document.getElementById('landing-page');
+        const testPage = document.getElementById('test-page');
+        const resultsPage = document.getElementById('results-page');
+        const worksheetPage = document.getElementById('worksheet-page');
+        const errorBanner = document.getElementById('error-banner');
+
+        const countSlider = document.getElementById('count-slider');
+        const countDisplay = document.getElementById('count-display');
+        const timerSlider = document.getElementById('timer-slider');
+        const timerDisplayVal = document.getElementById('timer-display-val');
+
+        const testProgressText = document.getElementById('test-progress-text');
+        const testTimer = document.getElementById('test-timer');
+        const activeQuestionContainer = document.getElementById('active-question-container');
+
+        // Sliders Feedback
+        countSlider.addEventListener('input', () => {
+            countDisplay.textContent = `${countSlider.value} Problems`;
+        });
+        timerSlider.addEventListener('input', () => {
+            timerDisplayVal.textContent = `${timerSlider.value} Minutes`;
+        });
+
+        // Topic Pills Interaction
+        document.querySelectorAll('#topic-pills .pill').forEach(p => {
+            p.addEventListener('click', () => p.classList.toggle('active'));
+        });
+        document.getElementById('topics-select-all').addEventListener('click', () => {
+            document.querySelectorAll('#topic-pills .pill').forEach(p => p.classList.add('active'));
+        });
+        document.getElementById('topics-clear-all').addEventListener('click', () => {
+            document.querySelectorAll('#topic-pills .pill').forEach(p => p.classList.remove('active'));
+        });
+
+        // Parse problems.txt format
+        function parseProblems(rawText) {
+            const list = [];
+            // Match each [Problem X] block
+            const blocks = rawText.split(/(?=\[Problem\s+\d+\])/gi);
+
+            for (const block of blocks) {
+                const trimmed = block.trim();
+                if (!trimmed) continue;
+
+                const headerMatch = trimmed.match(/^\[Problem\s+(\d+)\]/i);
+                if (!headerMatch) continue;
+
+                const id = parseInt(headerMatch[1], 10);
+                const tagMatch = trimmed.match(/\[TAGS?:\s*([^\]]+)\]/i);
+                const answerMatch = trimmed.match(/\[Answer:\s*([A-E])\]/i);
+                const choicesMatch = trimmed.match(/\[Choices:\s*([^\]]+)\]/i);
+
+                if (!tagMatch || !answerMatch || !choicesMatch) continue;
+
+                const tag = tagMatch[1].trim();
+                const correctAnswer = answerMatch[1].trim().toUpperCase();
+                const choicesRaw = choicesMatch[1].trim();
+
+                // Extract body text after all metadata tags
+                const metaEndPos = trimmed.indexOf(choicesMatch[0]) + choicesMatch[0].length;
+                const prompt = trimmed.slice(metaEndPos).trim();
+
+                // Parse choices: A) ... B) ... C) ... D) ... E) ...
+                const parsedChoices = parseChoiceLetters(choicesRaw);
+
+                list.push({
+                    id,
+                    tag,
+                    answer: correctAnswer,
+                    choices: parsedChoices,
+                    prompt
+                });
+            }
+            return list;
+        }
+
+        function parseChoiceLetters(rawChoices) {
+            const keys = ['A', 'B', 'C', 'D', 'E'];
+            const choices = [];
+            const regex = /([A-E]\))\s*([^A-E\)]+)(?=(?:[A-E]\))|$)/g;
+            let match;
+            while ((match = regex.exec(rawChoices)) !== null) {
+                choices.push({
+                    letter: match[1].charAt(0),
+                    text: match[2].trim()
+                });
+            }
+            if (choices.length < 5) {
+                return keys.map(k => ({ letter: k, text: `Option ${k}` }));
+            }
+            return choices;
+        }
+
+        async function loadProblems() {
+            try {
+                const res = await fetch(PROBLEM_FILE);
+                if (!res.ok) throw new Error(`Status ${res.status}`);
+                const text = await res.text();
+                allProblems = parseProblems(text);
+            } catch (err) {
+                console.warn("Could not load external problems.txt via fetch. Using local questions if available.", err);
+                showError("Unable to fetch problems.txt. If testing locally, ensure you run via a local server (e.g. npx serve or Live Server) or deploy directly to GitHub Pages.");
+            }
+        }
+
+        function showError(msg) {
+            errorBanner.textContent = msg;
+            errorBanner.style.display = 'block';
+        }
+
+        function clearError() {
+            errorBanner.textContent = '';
+            errorBanner.style.display = 'none';
+        }
+
+        function shuffle(arr) {
+            const c = [...arr];
+            for (let i = c.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [c[i], c[j]] = [c[j], c[i]];
+            }
+            return c;
+        }
+
+        function getSelectedFilteredProblems() {
+            clearError();
+            const activeTopics = Array.from(document.querySelectorAll('#topic-pills .pill.active'))
+                                     .map(p => p.dataset.topic.toLowerCase());
+
+            if (activeTopics.length === 0) {
+                showError("Please select at least one subject area.");
+                return null;
+            }
+
+            const requestedCount = parseInt(countSlider.value, 10);
+            const pool = allProblems.filter(p => activeTopics.includes(p.tag.toLowerCase()));
+
+            if (pool.length === 0) {
+                showError("No problems found matching the chosen subject areas in problems.txt.");
+                return null;
+            }
+
+            return shuffle(pool).slice(0, Math.min(requestedCount, pool.length));
+        }
+
+        // --- INTERACTIVE TEST RUNNER ---
+        document.getElementById('start-test-btn').addEventListener('click', () => {
+            const selected = getSelectedFilteredProblems();
+            if (!selected) return;
+
+            activeTestSet = selected;
+            userAnswers = {};
+            currentProblemIndex = 0;
+            remainingSeconds = parseInt(timerSlider.value, 10) * 60;
+
+            landingPage.style.display = 'none';
+            worksheetPage.style.display = 'none';
+            resultsPage.style.display = 'none';
+            testPage.style.display = 'block';
+
+            startTimer();
+            renderActiveQuestion();
+            window.scrollTo(0, 0);
+        });
+
+        function startTimer() {
+            clearInterval(testTimerInterval);
+            updateTimerDisplay();
+
+            testTimerInterval = setInterval(() => {
+                remainingSeconds--;
+                updateTimerDisplay();
+
+                if (remainingSeconds <= 0) {
+                    clearInterval(testTimerInterval);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(remainingSeconds / 60);
+            const secs = remainingSeconds % 60;
+            testTimer.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+            // Requirement 4: Turn from black to red when under 1 min
+            if (remainingSeconds < 60) {
+                testTimer.classList.add('timer-warning');
+            } else {
+                testTimer.classList.remove('timer-warning');
+            }
+        }
+
+        function renderActiveQuestion() {
+            const prob = activeTestSet[currentProblemIndex];
+            testProgressText.textContent = `Problem ${currentProblemIndex + 1} of${activeTestSet.length}`;
+
+            let choicesHtml = prob.choices.map(c => `
+                <div class="choice-option" onclick="handleChoiceClick('${c.letter}')">
+                    <div class="choice-bubble">${c.letter}</div>
+                    <div><strong>${c.letter})</strong>${escapeHtml(c.text)}</div>
+                </div>
+            `).join('');
+
+            activeQuestionContainer.innerHTML = `
+                <div class="question-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <h3 style="margin:0;">Problem ${currentProblemIndex + 1}</h3>
+                        <span class="tag-badge">${prob.tag}</span>
+                    </div>
+                    <div class="question-prompt">${escapeHtml(prob.prompt)}</div>
+                    <div class="choices-container">${choicesHtml}</div>
+                </div>
+            `;
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Requirement 3: When bubble A-E is clicked, advance to next question
+        window.handleChoiceClick = function(chosenLetter) {
+            userAnswers[currentProblemIndex] = chosenLetter;
+
+            if (currentProblemIndex + 1 < activeTestSet.length) {
+                currentProblemIndex++;
+                renderActiveQuestion();
+            } else {
+                finishTest();
+            }
+        };
+
+        document.getElementById('test-abort-btn').addEventListener('click', () => {
+            if (confirm("Are you sure you want to end the test and view your results now?")) {
+                finishTest();
+            }
+        });
+
+        function finishTest() {
+            clearInterval(testTimerInterval);
+            testPage.style.display = 'none';
+            resultsPage.style.display = 'block';
+            window.scrollTo(0, 0);
+
+            // Calculate Score
+            let correctCount = 0;
+            activeTestSet.forEach((prob, idx) => {
+                if (userAnswers[idx] === prob.answer) {
+                    correctCount++;
+                }
+            });
+
+            const total = activeTestSet.length;
+            const pct = Math.round((correctCount / total) * 100);
+            document.getElementById('score-headline').textContent = `Score: ${correctCount} / ${total} (${pct}%)`;
+            document.getElementById('score-details').textContent = `Correct Answers: ${correctCount} \vert{} Missed or Blank:${total - correctCount}`;
+
+            // Render detailed list of questions with answers
+            const container = document.getElementById('results-list-container');
+            container.innerHTML = '';
+
+            activeTestSet.forEach((prob, idx) => {
+                const userChoice = userAnswers[idx] || null;
+                const isCorrect = userChoice === prob.answer;
+                const isUnanswered = userChoice === null;
+
+                const statusClass = isCorrect ? 'correct' : (isUnanswered ? 'unanswered' : 'incorrect');
+                const badgeText = isCorrect ? '✓ Correct' : (isUnanswered ? '— Not Answered' : `✗ Incorrect (Your answer: ${userChoice})`);
+                const badgeClass = isCorrect ? 'status-correct' : (isUnanswered ? 'status-unanswered' : 'status-incorrect');
+
+                const choicesList = prob.choices.map(c => {
+                    let style = "padding: 6px 12px; border-radius: 4px; margin: 4px 0;";
+                    if (c.letter === prob.answer) {
+                        style += "background:#d4edda; font-weight:bold; color:#155724;";
+                    } else if (c.letter === userChoice && !isCorrect) {
+                        style += "background:#f8d7da; color:#721c24;";
+                    }
+                    return `<div style="${style}">${c.letter})${escapeHtml(c.text)}</div>`;
+                }).join('');
+
+                const item = document.createElement('div');
+                item.className = `result-item ${statusClass}`;
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span class="result-status-badge ${badgeClass}">${badgeText}</span>
+                        <span class="tag-badge">${prob.tag}</span>
+                    </div>
+                    <div style="font-weight:bold; margin-bottom:8px;">Problem ${idx + 1}</div>
+                    <div style="margin-bottom:12px; font-size:16px;">${escapeHtml(prob.prompt)}</div>
+                    <div style="margin-bottom:8px;">${choicesList}</div>
+                    <div style="font-size:14px; color:#495057; margin-top:8px;"><strong>Correct Answer:</strong> ${prob.answer}</div>
+                `;
+                container.appendChild(item);
+            });
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // --- WORKSHEET (PDF) MODE ---
+        document.getElementById('print-worksheet-btn').addEventListener('click', () => {
+            const selected = getSelectedFilteredProblems();
+            if (!selected) return;
+
+            landingPage.style.display = 'none';
+            worksheetPage.style.display = 'block';
+            window.scrollTo(0, 0);
+
+            document.getElementById('worksheet-meta').textContent = `Total Questions: ${selected.length} \vert{} Generated on${new Date().toLocaleDateString()}`;
+            const container = document.getElementById('worksheet-list-container');
+            container.innerHTML = '';
+
+            selected.forEach((prob, idx) => {
+                const row = document.createElement('div');
+                row.className = 'question-card';
+
+                const choicesGrid = prob.choices.map(c => `
+                    <div style="flex: 1; min-width: 120px; font-size: 15px;">
+                        <strong>(${c.letter})</strong>${escapeHtml(c.text)}
+                    </div>
+                `).join('');
+
+                row.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <strong>Question ${idx + 1}</strong>
+                        <span class="tag-badge">${prob.tag}</span>
+                    </div>
+                    <div style="font-size: 16px; margin-bottom: 15px;">${escapeHtml(prob.prompt)}</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:10px;">${choicesGrid}</div>
+                `;
+                container.appendChild(row);
+            });
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        });
+
+        // Navigation Back Handlers
+        document.getElementById('results-back-btn').addEventListener('click', () => {
+            resultsPage.style.display = 'none';
+            landingPage.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+
+        document.getElementById('worksheet-back-btn').addEventListener('click', () => {
+            worksheetPage.style.display = 'none';
+            landingPage.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Initialize
+        loadProblems();
+    </script>
+</body>
+</html>
