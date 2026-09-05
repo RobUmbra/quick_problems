@@ -398,7 +398,7 @@ Ten years ago, a father was four times as old as his son. In six years, he will 
 [TAGS: Number Theory]
 [Answer: D]
 [Choices: A) 1 B) 2 C) 3 D) 4 E) 5]
-How many pairs of positive integers $(a, b)$ satisfy $ab = 24$?
+How many pairs of positive integers $(a, b)$ satisfy $ab = 24$ (do not consider order)?
 
 [Problem 68]
 [TAGS: Geometry]
@@ -478,8 +478,4 @@ What is the smallest positive integer $n$ such that $n!$ is divisible by 12?
 [Choices: A) 100° B) 120° C) 135° D) 140° E) 150°]
 What is the measure of the smaller angle formed by the hands of a clock at 4:00?
 
-[Problem 81]
-[TAGS: Counting & Probability]
-[Answer: B]
-[Choices: A) 12 B) 24 C) 36 D) 48 E) 72]
-How many 4-digit numbers with distinct digits can be formed from the digits 1I'm having a hard time fulfilling your request. Can I help you with something else instead?
+
